@@ -16,3 +16,13 @@
     justify-content: space-evenly;
     align-items: flex-end;
 }
+.wrapper .graph .item{
+    width: 5px;
+    background-color: black;   
+}
+.wrapper .graph .item.first{
+    background-color: green;
+}
+.wrapper .graph .item.second{
+    background-color: red;
+}
