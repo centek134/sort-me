@@ -9,7 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const graphId = document.getElementById("graph");
-const arr = Array(50).fill(0, 0).map(() => Math.floor(Math.random() * 300));
+const arr = Array(100).fill(0, 0).map(() => Math.floor(Math.random() * 300));
+const sorted_arr_copy = JSON.parse(JSON.stringify(arr));
+sorted_arr_copy.sort((a, b) => a - b);
 const createGraphItems = (arr) => {
     arr.forEach(item => {
         const el = document.createElement("div");
@@ -27,12 +29,10 @@ const sleep = (ms) => {
 const colorize = (num_1, num_2) => {
     const nodes = document.querySelectorAll(".item");
     nodes.forEach(el => {
-        el.classList.remove("first");
-        el.classList.remove("second");
+        el.classList.remove("compare");
     });
-    console.log(num_2);
-    nodes[num_1].classList.add("first");
-    nodes[num_2].classList.add("second");
+    nodes[num_1].classList.add("compare");
+    nodes[num_2].classList.add("compare");
 };
 function bubbleSort(inputArr) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -40,20 +40,34 @@ function bubbleSort(inputArr) {
         for (let i = 0; i < len; i++) {
             for (let j = 0; j < len - 1; j++) {
                 colorize(j, j + 1);
-                yield sleep(400);
-                if (inputArr[j] < inputArr[j + 1]) {
+                yield sleep(5);
+                if (inputArr[j] > inputArr[j + 1]) {
                     let tmp = inputArr[j];
                     inputArr[j] = inputArr[j + 1];
                     inputArr[j + 1] = tmp;
                     removeGraphItems();
                     createGraphItems(inputArr);
                 }
+                ;
+                compare_pos();
             }
+            ;
         }
+        ;
         return inputArr;
     });
 }
 ;
+const compare_pos = () => {
+    const nodes = document.querySelectorAll(".item");
+    for (let i = 0; i < sorted_arr_copy.length; i++) {
+        if (sorted_arr_copy[i] === arr[i]) {
+            nodes[i].style.backgroundColor = "yellow";
+        }
+        ;
+    }
+    ;
+};
 createGraphItems(arr);
 const buttonId = document.getElementById("btn").addEventListener("click", () => {
     bubbleSort(arr);
