@@ -20,9 +20,6 @@
     width: 5px;
     background-color: black;   
 }
-.wrapper .graph .item.first{
-    background-color: green;
-}
-.wrapper .graph .item.second{
+.wrapper .graph .item.compare{
     background-color: red;
 }
