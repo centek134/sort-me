@@ -6,12 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style/style.css">
     <title>sort-me</title>
+
 </head>
 <body>
     <div class="wrapper">
+        <nav class="nav">
+            <div class="nav_div">
+                <label for="array_item_count">Array size</label>
+                <input type= "range" name="array_item_count" id="arr_input" min="10" max="100">
+            </div>
+            <div class="nav_div">
+                <label for="sort_speed">Sorting speed</label>
+                <input type="range" name="sort_speed" id="speed_input" min="10" max="200">
+            </div>      
+                <button id="btn_bubble" class="nav_btn">Bubble sort</button>
+                <button id="btn_insertion" class="nav_btn">Insertion sort</button>
+        </nav>
         <div id="graph" class="graph"></div>
     </div>
-    <button id="btn">Kliknij mnie aby sortować</button>
-    <script src="./scripts/script.js"></script>
+    <script src="./scripts/main.js"></script>
 </body>
 </html>
