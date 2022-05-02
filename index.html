@@ -13,11 +13,13 @@
         <nav class="nav">
             <div class="nav_div">
                 <label for="array_item_count">Array size</label>
-                <input type= "range" name="array_item_count" id="arr_input" min="10" max="100">
+                <input type= "range" name="array_item_count" id="arr_size_input" min="10" max="200" oninput="this.nextElementSibling.value = this.value">
+                <output>100</output>
             </div>
             <div class="nav_div">
                 <label for="sort_speed">Sorting speed</label>
-                <input type="range" name="sort_speed" id="speed_input" min="10" max="200">
+                <input type="range" name="sort_speed" id="arr_speed_input" min="5" max="100" oninput="this.nextElementSibling.value = this.value">
+                <output>50</output>
             </div>      
                 <button id="btn_bubble" class="nav_btn">Bubble sort</button>
                 <button id="btn_insertion" class="nav_btn">Insertion sort</button>
