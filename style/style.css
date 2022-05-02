@@ -17,6 +17,20 @@
     justify-content: flex-start;
     align-items: center;
 }
+.wrapper .nav .nav_div {
+    margin: 0 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.wrapper .nav .nav_div label{
+    font-size: 20px;
+}
+.wrapper .nav .nav_div input{
+    cursor: pointer;
+}
 .wrapper .nav .nav_btn{
     height: 100%;
     color: white;
