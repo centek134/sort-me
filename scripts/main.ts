@@ -1,7 +1,15 @@
 const graphId = document.getElementById("graph");
-const arr:number[] = Array(100).fill(0,0).map( () => Math.floor(Math.random() * 300));
-const sorted_arr_copy:number[] = JSON.parse(JSON.stringify(arr));
-sorted_arr_copy.sort((a,b)=> a-b);
+let arr:number[] = [];
+let sorted_arr_copy:number[] = [];
+let sortSpeed = 5;
+
+const generateArray = (arr_size:number) => {
+    arr = Array(arr_size).fill(0,0).map( () => Math.floor(Math.random() * 300));
+    sorted_arr_copy = JSON.parse(JSON.stringify(arr));
+    sorted_arr_copy.sort((a,b)=> a-b);
+    removeGraphItems();
+    createGraphItems(arr);
+};
 
 const createGraphItems = (arr:number[]):void => {
     arr.forEach( item => {
@@ -16,8 +24,8 @@ const removeGraphItems = ():void => {
     graphId!.innerHTML = "";
 };
 
-const sleep = (ms:number) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
+const sleep = () => {
+    return new Promise(resolve => setTimeout(resolve, sortSpeed));
 };
 
 const colorize = (num_1:number,num_2:number):void => {
@@ -34,7 +42,7 @@ async function bubbleSort(inputArr:number[]){
     for (let i = 0; i < len; i++) {
         for (let j = 0; j < len -1 ; j++) {
             colorize(j,j+1)
-            await sleep(5);
+            await sleep();
             if (inputArr[j] > inputArr[j+1]){
                 let tmp = inputArr[j];
                 inputArr[j] = inputArr[j+1];
@@ -62,7 +70,8 @@ async function insertionSort(inputArr:number[]) {
             let current = inputArr[i];
             let j = i-1; 
             while ((j > -1) && (current < inputArr[j])) {
-                await sleep(5);
+                colorize(i,j)
+                await sleep();
                 removeGraphItems();
                 createGraphItems(inputArr);
                 compare_pos();
@@ -73,10 +82,16 @@ async function insertionSort(inputArr:number[]) {
         };
     compare_pos();
 };
-createGraphItems(arr);
-const button_bubblesort = document.getElementById("btn_bubble")!.addEventListener("click",() => {
+generateArray(50);
+const btnBubblesort = document.getElementById("btn_bubble")!.addEventListener("click",() => {
     bubbleSort(arr);
 });
-const button_insertsort = document.getElementById("btn_insertion")!.addEventListener("click",() => {
+const btnInsertsort = document.getElementById("btn_insertion")!.addEventListener("click",() => {
     insertionSort(arr);
+});
+const arrSizeInput = document.getElementById("arr_size_input")!.addEventListener("change", (event:any) => {
+    generateArray(parseInt(event.target.value));
+});
+const arrSortSpeed = document.getElementById("arr_speed_input")!.addEventListener("change", (event:any) => {
+    sortSpeed = parseInt(event.target.value);
 });
