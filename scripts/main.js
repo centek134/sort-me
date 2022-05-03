@@ -12,6 +12,7 @@ const graphId = document.getElementById("graph");
 let arr = [];
 let sorted_arr_copy = [];
 let sortSpeed = 5;
+// function that generates our random array
 const generateArray = (arr_size) => {
     arr = Array(arr_size).fill(0, 0).map(() => Math.floor(Math.random() * 300));
     sorted_arr_copy = JSON.parse(JSON.stringify(arr));
@@ -19,6 +20,7 @@ const generateArray = (arr_size) => {
     removeGraphItems();
     createGraphItems(arr);
 };
+// function that takes an array as argument, creates div elements with height = arr[i] value, and appends them to  our graphId div
 const createGraphItems = (arr) => {
     arr.forEach(item => {
         const el = document.createElement("div");
@@ -27,12 +29,15 @@ const createGraphItems = (arr) => {
         graphId.append(el);
     });
 };
+// function that removes our columns in graph, so we can reder the once more later
 const removeGraphItems = () => {
     graphId.innerHTML = "";
 };
+// function that returns promise, we are using it to control render time
 const sleep = () => {
     return new Promise(resolve => setTimeout(resolve, sortSpeed));
 };
+// functions that colors our actual compared numbers, it takes 2 numbers (array indexes of compared numbers) and then we are adding styles to them 
 const colorize = (num_1, num_2) => {
     const nodes = document.querySelectorAll(".item");
     nodes.forEach(el => {
@@ -41,6 +46,20 @@ const colorize = (num_1, num_2) => {
     nodes[num_1].classList.add("compare");
     nodes[num_2].classList.add("compare");
 };
+// function thath compare positions of sorted array with unsorted one.
+// If we sort unsorted array and one of the number is in the correct spot i.e. number is sorted its beign highlighted on yellow
+const compare_pos = () => {
+    const nodes = document.querySelectorAll(".item");
+    for (let i = 0; i < sorted_arr_copy.length; i++) {
+        if (sorted_arr_copy[i] === arr[i]) {
+            nodes[i].style.backgroundColor = "yellow";
+        }
+        ;
+    }
+    ;
+};
+// ========= SORTING FUNCTIONS ===============
+//------------Bubble Sort ---------------------
 function bubbleSort(inputArr) {
     return __awaiter(this, void 0, void 0, function* () {
         let len = inputArr.length;
@@ -61,20 +80,10 @@ function bubbleSort(inputArr) {
             ;
         }
         ;
-        return inputArr;
     });
 }
 ;
-const compare_pos = () => {
-    const nodes = document.querySelectorAll(".item");
-    for (let i = 0; i < sorted_arr_copy.length; i++) {
-        if (sorted_arr_copy[i] === arr[i]) {
-            nodes[i].style.backgroundColor = "yellow";
-        }
-        ;
-    }
-    ;
-};
+// ----------- Insertion Sort ------------------
 function insertionSort(inputArr) {
     return __awaiter(this, void 0, void 0, function* () {
         for (let i = 1; i < inputArr.length; i++) {
@@ -97,6 +106,7 @@ function insertionSort(inputArr) {
     });
 }
 ;
+// ======================================================
 generateArray(50);
 const btnBubblesort = document.getElementById("btn_bubble").addEventListener("click", () => {
     bubbleSort(arr);
