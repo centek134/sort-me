@@ -9,6 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const graphId = document.getElementById("graph");
+const btnBubblesort = document.getElementById("btn_bubble");
+const btnInsertsort = document.getElementById("btn_insertion");
+const arrSizeInput = document.getElementById("arr_size_input");
+const arrSortSpeedInput = document.getElementById("arr_speed_input");
 let arr = [];
 let sorted_arr_copy = [];
 let sortSpeed = 5;
@@ -62,6 +66,7 @@ const compare_pos = () => {
 //------------Bubble Sort ---------------------
 function bubbleSort(inputArr) {
     return __awaiter(this, void 0, void 0, function* () {
+        disableMenu(true);
         let len = inputArr.length;
         for (let i = 0; i < len; i++) {
             for (let j = 0; j < len - 1; j++) {
@@ -80,12 +85,15 @@ function bubbleSort(inputArr) {
             ;
         }
         ;
+        compare_pos();
+        disableMenu(false);
     });
 }
 ;
 // ----------- Insertion Sort ------------------
 function insertionSort(inputArr) {
     return __awaiter(this, void 0, void 0, function* () {
+        disableMenu(true);
         for (let i = 1; i < inputArr.length; i++) {
             let current = inputArr[i];
             let j = i - 1;
@@ -103,20 +111,34 @@ function insertionSort(inputArr) {
         }
         ;
         compare_pos();
+        disableMenu(false);
     });
 }
 ;
 // ======================================================
+const disableMenu = (isSorted) => {
+    if (isSorted) {
+        btnBubblesort.disabled = true;
+        btnInsertsort.disabled = true;
+        arrSizeInput.disabled = true;
+    }
+    else {
+        btnBubblesort.disabled = false;
+        btnInsertsort.disabled = false;
+        arrSizeInput.disabled = false;
+    }
+    ;
+};
 generateArray(50);
-const btnBubblesort = document.getElementById("btn_bubble").addEventListener("click", () => {
+btnBubblesort.addEventListener("click", () => {
     bubbleSort(arr);
 });
-const btnInsertsort = document.getElementById("btn_insertion").addEventListener("click", () => {
+btnInsertsort.addEventListener("click", () => {
     insertionSort(arr);
 });
-const arrSizeInput = document.getElementById("arr_size_input").addEventListener("change", (event) => {
+arrSizeInput.addEventListener("change", (event) => {
     generateArray(parseInt(event.target.value));
 });
-const arrSortSpeed = document.getElementById("arr_speed_input").addEventListener("change", (event) => {
+arrSortSpeedInput.addEventListener("change", (event) => {
     sortSpeed = parseInt(event.target.value);
 });
