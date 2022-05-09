@@ -12,6 +12,7 @@ const graphId = document.getElementById("graph");
 const btnBubblesort = document.getElementById("btn_bubble");
 const btnInsertsort = document.getElementById("btn_insertion");
 const arrSizeInput = document.getElementById("arr_size_input");
+const btnSelectionSort = document.getElementById("btn_selection");
 const arrSortSpeedInput = document.getElementById("arr_speed_input");
 let arr = [];
 let sorted_arr_copy = [];
@@ -115,17 +116,45 @@ function insertionSort(inputArr) {
     });
 }
 ;
+// ------------- Selection Sort --------------------
+function selectionSort(arr) {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (let i = 0; i < arr.length; i++) {
+            let min = i;
+            for (let j = i + 1; j < arr.length; j++) {
+                if (arr[j] < arr[min]) {
+                    min = j;
+                }
+                ;
+            }
+            ;
+            let temp = arr[i];
+            arr[i] = arr[min];
+            arr[min] = temp;
+            yield sleep();
+            removeGraphItems();
+            createGraphItems(arr);
+        }
+    });
+}
+;
 // ======================================================
 const disableMenu = (isSorted) => {
     if (isSorted) {
         btnBubblesort.disabled = true;
+        btnBubblesort.classList.add("disabled");
         btnInsertsort.disabled = true;
+        btnInsertsort.classList.add("disabled");
         arrSizeInput.disabled = true;
+        arrSizeInput.classList.add("disabled");
     }
     else {
         btnBubblesort.disabled = false;
+        btnBubblesort.classList.remove("disabled");
         btnInsertsort.disabled = false;
+        btnInsertsort.classList.remove("disabled");
         arrSizeInput.disabled = false;
+        arrSizeInput.classList.remove("disabled");
     }
     ;
 };
@@ -135,6 +164,9 @@ btnBubblesort.addEventListener("click", () => {
 });
 btnInsertsort.addEventListener("click", () => {
     insertionSort(arr);
+});
+btnSelectionSort.addEventListener("click", () => {
+    selectionSort(arr);
 });
 arrSizeInput.addEventListener("change", (event) => {
     generateArray(parseInt(event.target.value));
