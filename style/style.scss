@@ -28,6 +28,9 @@
             input{
                 cursor: pointer;
             }
+            .disabled{
+                background-color: rgb(255, 174, 160);
+            }
         }
     .nav_btn{
             height: 100%;
@@ -43,6 +46,9 @@
                 color: tomato;
             }
         }
+    }
+    .nav_btn.disabled{
+        background-color: rgb(255, 174, 160);
     }
     .graph{
         width: 100%;

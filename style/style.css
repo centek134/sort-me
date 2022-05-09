@@ -32,6 +32,9 @@
 .wrapper .nav .nav_div input {
   cursor: pointer;
 }
+.wrapper .nav .nav_div .disabled {
+  background-color: rgb(255, 174, 160);
+}
 .wrapper .nav .nav_btn {
   height: 100%;
   color: white;
@@ -45,6 +48,9 @@
 .wrapper .nav .nav_btn:hover {
   background-color: white;
   color: tomato;
+}
+.wrapper .nav_btn.disabled {
+  background-color: rgb(255, 174, 160);
 }
 .wrapper .graph {
   width: 100%;
