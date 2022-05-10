@@ -1,13 +1,13 @@
 const graphId = document.getElementById("graph");
-const btnBubblesort = document.getElementById("btn_bubble") as HTMLButtonElement;
-const btnInsertsort = document.getElementById("btn_insertion") as HTMLButtonElement;
+const btnBubbleSort = document.getElementById("btn_bubble") as HTMLButtonElement;
+const btnInsertSort = document.getElementById("btn_insertion") as HTMLButtonElement;
 const arrSizeInput = document.getElementById("arr_size_input") as HTMLInputElement;
 const btnSelectionSort = document.getElementById("btn_selection") as HTMLButtonElement;
 const arrSortSpeedInput = document.getElementById("arr_speed_input") as HTMLInputElement;
 
 let arr:number[] = [];
 let sorted_arr_copy:number[] = [];
-let sortSpeed = 5;
+let sortSpeed = 150;
 
 // function that generates our random array
 const generateArray = (arr_size:number) => {
@@ -49,7 +49,7 @@ const compare_pos = () => {
     const nodes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".item");
     for(let i = 0; i < sorted_arr_copy.length; i++){
         if(sorted_arr_copy[i] === arr[i]){
-            nodes[i].style.backgroundColor = "yellow";
+            nodes[i].style.backgroundColor = "#FFD12A";
         };
     };
 };
@@ -96,12 +96,14 @@ async function insertionSort(inputArr:number[]) {
     compare_pos();
     disableMenu(false);
 };
-
 // ------------- Selection Sort --------------------
 async function selectionSort (arr:number[]){
+    disableMenu(true);
     for(let i = 0; i < arr.length; i++){
         let min:number = i;
         for(let j = i+1; j < arr.length; j++){
+            colorize(min,j);
+            await sleep();
             if(arr[j] < arr[min]){
                 min = j;
             };
@@ -109,37 +111,41 @@ async function selectionSort (arr:number[]){
         let temp:number = arr[i];
         arr[i] = arr[min];
         arr[min] = temp;
-        await sleep();
         removeGraphItems();
         createGraphItems(arr);
-    }
+        compare_pos();
+    };
+    disableMenu(false);
   };
 // ======================================================
-
+// functions responsible for disabling navigation buttons
 const disableMenu = (isSorted:boolean):void => {
     if(isSorted){
-        btnBubblesort.disabled = true;
-        btnBubblesort.classList.add("disabled");
-        btnInsertsort.disabled = true;
-        btnInsertsort.classList.add("disabled");
+        btnBubbleSort.disabled = true;
+        btnBubbleSort.classList.add("disabled");
+        btnInsertSort.disabled = true;
+        btnInsertSort.classList.add("disabled");
+        btnSelectionSort.disabled = true;
+        btnSelectionSort.classList.add("disabled");
         arrSizeInput.disabled = true;
         arrSizeInput.classList.add("disabled");
     }
     else{
-        btnBubblesort.disabled = false;
-        btnBubblesort.classList.remove("disabled");
-        btnInsertsort.disabled = false;
-        btnInsertsort.classList.remove("disabled");
+        btnBubbleSort.disabled = false;
+        btnBubbleSort.classList.remove("disabled");
+        btnInsertSort.disabled = false;
+        btnInsertSort.classList.remove("disabled");
+        btnSelectionSort.disabled = false;
+        btnSelectionSort.classList.remove("disabled");
         arrSizeInput.disabled = false;
         arrSizeInput.classList.remove("disabled");
     };
 };
-
-generateArray(50);
-btnBubblesort!.addEventListener("click",() => {
+generateArray(150);
+btnBubbleSort!.addEventListener("click",() => {
     bubbleSort(arr);
 });
-btnInsertsort!.addEventListener("click",() => {
+btnInsertSort!.addEventListener("click",() => {
     insertionSort(arr);
 });
 btnSelectionSort!.addEventListener("click", () => {

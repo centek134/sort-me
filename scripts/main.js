@@ -9,14 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const graphId = document.getElementById("graph");
-const btnBubblesort = document.getElementById("btn_bubble");
-const btnInsertsort = document.getElementById("btn_insertion");
+const btnBubbleSort = document.getElementById("btn_bubble");
+const btnInsertSort = document.getElementById("btn_insertion");
 const arrSizeInput = document.getElementById("arr_size_input");
 const btnSelectionSort = document.getElementById("btn_selection");
 const arrSortSpeedInput = document.getElementById("arr_speed_input");
 let arr = [];
 let sorted_arr_copy = [];
-let sortSpeed = 5;
+let sortSpeed = 150;
 // function that generates our random array
 const generateArray = (arr_size) => {
     arr = Array(arr_size).fill(0, 0).map(() => Math.floor(Math.random() * 300));
@@ -57,7 +57,7 @@ const compare_pos = () => {
     const nodes = document.querySelectorAll(".item");
     for (let i = 0; i < sorted_arr_copy.length; i++) {
         if (sorted_arr_copy[i] === arr[i]) {
-            nodes[i].style.backgroundColor = "yellow";
+            nodes[i].style.backgroundColor = "#FFD12A";
         }
         ;
     }
@@ -119,9 +119,12 @@ function insertionSort(inputArr) {
 // ------------- Selection Sort --------------------
 function selectionSort(arr) {
     return __awaiter(this, void 0, void 0, function* () {
+        disableMenu(true);
         for (let i = 0; i < arr.length; i++) {
             let min = i;
             for (let j = i + 1; j < arr.length; j++) {
+                colorize(min, j);
+                yield sleep();
                 if (arr[j] < arr[min]) {
                     min = j;
                 }
@@ -131,38 +134,45 @@ function selectionSort(arr) {
             let temp = arr[i];
             arr[i] = arr[min];
             arr[min] = temp;
-            yield sleep();
             removeGraphItems();
             createGraphItems(arr);
+            compare_pos();
         }
+        ;
+        disableMenu(false);
     });
 }
 ;
 // ======================================================
+// functions responsible for disabling navigation buttons
 const disableMenu = (isSorted) => {
     if (isSorted) {
-        btnBubblesort.disabled = true;
-        btnBubblesort.classList.add("disabled");
-        btnInsertsort.disabled = true;
-        btnInsertsort.classList.add("disabled");
+        btnBubbleSort.disabled = true;
+        btnBubbleSort.classList.add("disabled");
+        btnInsertSort.disabled = true;
+        btnInsertSort.classList.add("disabled");
+        btnSelectionSort.disabled = true;
+        btnSelectionSort.classList.add("disabled");
         arrSizeInput.disabled = true;
         arrSizeInput.classList.add("disabled");
     }
     else {
-        btnBubblesort.disabled = false;
-        btnBubblesort.classList.remove("disabled");
-        btnInsertsort.disabled = false;
-        btnInsertsort.classList.remove("disabled");
+        btnBubbleSort.disabled = false;
+        btnBubbleSort.classList.remove("disabled");
+        btnInsertSort.disabled = false;
+        btnInsertSort.classList.remove("disabled");
+        btnSelectionSort.disabled = false;
+        btnSelectionSort.classList.remove("disabled");
         arrSizeInput.disabled = false;
         arrSizeInput.classList.remove("disabled");
     }
     ;
 };
-generateArray(50);
-btnBubblesort.addEventListener("click", () => {
+generateArray(150);
+btnBubbleSort.addEventListener("click", () => {
     bubbleSort(arr);
 });
-btnInsertsort.addEventListener("click", () => {
+btnInsertSort.addEventListener("click", () => {
     insertionSort(arr);
 });
 btnSelectionSort.addEventListener("click", () => {
