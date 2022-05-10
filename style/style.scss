@@ -27,6 +27,7 @@
             }
             input{
                 cursor: pointer;
+                max-width: 200px;
             }
             .disabled{
                 background-color: rgb(255, 174, 160);
@@ -58,7 +59,7 @@
         justify-content: space-evenly;
         align-items: flex-end; 
         .item{
-            width: 5px;
+            width: 4px;
             background-color: black;  
         }
         .item.compare{
