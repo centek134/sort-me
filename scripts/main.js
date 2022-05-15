@@ -11,8 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const graphId = document.getElementById("graph");
 const btnBubbleSort = document.getElementById("btn_bubble");
 const btnInsertSort = document.getElementById("btn_insertion");
-const arrSizeInput = document.getElementById("arr_size_input");
 const btnSelectionSort = document.getElementById("btn_selection");
+const btnQuickSort = document.getElementById("btn_quick");
+const arrSizeInput = document.getElementById("arr_size_input");
 const arrSortSpeedInput = document.getElementById("arr_speed_input");
 let arr = [];
 let sorted_arr_copy = [];
@@ -143,6 +144,26 @@ function selectionSort(arr) {
     });
 }
 ;
+//---------------- Quick Sort -----------------------
+function quickSort(arr) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+    const left = [];
+    const right = [];
+    const pivot = arr[arr.length - 1];
+    for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i] < pivot) {
+            left.push(arr[i]);
+        }
+        else {
+            right.push(arr[i]);
+        }
+        ;
+    }
+    ;
+}
+;
 // ======================================================
 // functions responsible for disabling navigation buttons
 const disableMenu = (isSorted) => {
@@ -177,6 +198,9 @@ btnInsertSort.addEventListener("click", () => {
 });
 btnSelectionSort.addEventListener("click", () => {
     selectionSort(arr);
+});
+btnQuickSort.addEventListener("click", () => {
+    console.log(quickSort(arr));
 });
 arrSizeInput.addEventListener("change", (event) => {
     generateArray(parseInt(event.target.value));

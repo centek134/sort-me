@@ -1,8 +1,9 @@
 const graphId = document.getElementById("graph");
 const btnBubbleSort = document.getElementById("btn_bubble") as HTMLButtonElement;
 const btnInsertSort = document.getElementById("btn_insertion") as HTMLButtonElement;
-const arrSizeInput = document.getElementById("arr_size_input") as HTMLInputElement;
 const btnSelectionSort = document.getElementById("btn_selection") as HTMLButtonElement;
+const btnQuickSort = document.getElementById("btn_quick") as HTMLButtonElement;
+const arrSizeInput = document.getElementById("arr_size_input") as HTMLInputElement;
 const arrSortSpeedInput = document.getElementById("arr_speed_input") as HTMLInputElement;
 
 let arr:number[] = [];
@@ -117,7 +118,26 @@ async function selectionSort (arr:number[]){
     };
     disableMenu(false);
   };
+
+//---------------- Quick Sort -----------------------
+function quickSort(arr:number[]){
+    if(arr.length <= 1){
+        return arr;
+    }
+    const left = [];
+    const right = [];
+    const pivot = arr[arr.length - 1];
+    for (let i = 0; i < arr.length-1; i++){
+        if(arr[i] < pivot){
+            left.push(arr[i]);
+        }
+        else{
+            right.push(arr[i]);
+        };
+    };
+};
 // ======================================================
+
 // functions responsible for disabling navigation buttons
 const disableMenu = (isSorted:boolean):void => {
     if(isSorted){
@@ -150,7 +170,10 @@ btnInsertSort!.addEventListener("click",() => {
 });
 btnSelectionSort!.addEventListener("click", () => {
     selectionSort(arr);
-})
+});
+btnQuickSort.addEventListener("click", () => {
+    console.log(quickSort(arr));
+});
 arrSizeInput!.addEventListener("change", (event:any) => {
     generateArray(parseInt(event.target.value));
 });
