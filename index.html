@@ -17,14 +17,15 @@
                 <output>150</output>
             </div>
             <div class="nav_div">
-                <label for="sort_speed">Sorting speed</label>
+                <label for="sort_speed">Delay [ms]</label>
                 <input type="range" name="sort_speed" id="arr_speed_input" min="5" max="300" oninput="this.nextElementSibling.value = this.value">
                 <output>150</output>
             </div>      
                 <button id="btn_bubble" class="nav_btn">Bubble sort</button>
                 <button id="btn_insertion" class="nav_btn">Insertion sort</button>
                 <button id="btn_selection" class="nav_btn">Selection sort</button>
-        </nav>
+                <button id="btn_quick" class="nav_btn">Quick sort</button>
+            </nav>
         <div id="graph" class="graph"></div>
     </div>
     <script src="./scripts/main.js"></script>
