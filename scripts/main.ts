@@ -109,6 +109,7 @@ async function selectionSort (arr:number[]){
                 min = j;
             };
         };
+        
         let temp:number = arr[i];
         arr[i] = arr[min];
         arr[min] = temp;
@@ -120,20 +121,36 @@ async function selectionSort (arr:number[]){
   };
 
 //---------------- Quick Sort -----------------------
-function quickSort(arr:number[]){
+async function quickSort(arr:number[],left:number,right:number){
     if(arr.length <= 1){
         return arr;
-    }
-    const left = [];
-    const right = [];
-    const pivot = arr[arr.length - 1];
-    for (let i = 0; i < arr.length-1; i++){
-        if(arr[i] < pivot){
-            left.push(arr[i]);
-        }
-        else{
-            right.push(arr[i]);
+    };
+    removeGraphItems();
+    createGraphItems(arr);
+    let i, j, x;
+    i = j = left;
+    await sleep();
+    while(i < right) {
+        if (arr[i] <= arr[right]) { 
+            x = arr[j]; 
+            arr[j] = arr[i];
+            arr[i] = x;
+            j++;
         };
+        removeGraphItems();
+        createGraphItems(arr);
+        colorize(i,j)
+        await sleep()
+        i++;
+    };
+    x = arr[j];
+    arr[j] = arr[right];
+    arr[right] = x;
+    if (left < j - 1){
+        quickSort(arr, left, j - 1);
+    };
+    if (j+1 < right){
+        quickSort(arr, j+1, right);
     };
 };
 // ======================================================
@@ -172,7 +189,7 @@ btnSelectionSort!.addEventListener("click", () => {
     selectionSort(arr);
 });
 btnQuickSort.addEventListener("click", () => {
-    console.log(quickSort(arr));
+    console.log(quickSort(arr,0,arr.length-1));
 });
 arrSizeInput!.addEventListener("change", (event:any) => {
     generateArray(parseInt(event.target.value));

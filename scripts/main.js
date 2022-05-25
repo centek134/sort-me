@@ -145,23 +145,44 @@ function selectionSort(arr) {
 }
 ;
 //---------------- Quick Sort -----------------------
-function quickSort(arr) {
-    if (arr.length <= 1) {
-        return arr;
-    }
-    const left = [];
-    const right = [];
-    const pivot = arr[arr.length - 1];
-    for (let i = 0; i < arr.length - 1; i++) {
-        if (arr[i] < pivot) {
-            left.push(arr[i]);
-        }
-        else {
-            right.push(arr[i]);
+function quickSort(arr, left, right) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (arr.length <= 1) {
+            return arr;
         }
         ;
-    }
-    ;
+        removeGraphItems();
+        createGraphItems(arr);
+        let i, j, x;
+        i = j = left;
+        yield sleep();
+        while (i < right) {
+            if (arr[i] <= arr[right]) {
+                x = arr[j];
+                arr[j] = arr[i];
+                arr[i] = x;
+                j++;
+            }
+            ;
+            removeGraphItems();
+            createGraphItems(arr);
+            colorize(i, j);
+            yield sleep();
+            i++;
+        }
+        ;
+        x = arr[j];
+        arr[j] = arr[right];
+        arr[right] = x;
+        if (left < j - 1) {
+            quickSort(arr, left, j - 1);
+        }
+        ;
+        if (j + 1 < right) {
+            quickSort(arr, j + 1, right);
+        }
+        ;
+    });
 }
 ;
 // ======================================================
@@ -200,7 +221,7 @@ btnSelectionSort.addEventListener("click", () => {
     selectionSort(arr);
 });
 btnQuickSort.addEventListener("click", () => {
-    console.log(quickSort(arr));
+    console.log(quickSort(arr, 0, arr.length - 1));
 });
 arrSizeInput.addEventListener("change", (event) => {
     generateArray(parseInt(event.target.value));
