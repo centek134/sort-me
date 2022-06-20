@@ -15,6 +15,7 @@ const btnSelectionSort = document.getElementById("btn_selection");
 const btnQuickSort = document.getElementById("btn_quick");
 const arrSizeInput = document.getElementById("arr_size_input");
 const arrSortSpeedInput = document.getElementById("arr_speed_input");
+const btnHeapSort = document.getElementById("btn_heap");
 let arr = [];
 let sorted_arr_copy = [];
 let sortSpeed = 150;
@@ -151,6 +152,7 @@ function quickSort(arr, left, right) {
             return arr;
         }
         ;
+        disableMenu(true);
         removeGraphItems();
         createGraphItems(arr);
         let i, j, x;
@@ -166,7 +168,6 @@ function quickSort(arr, left, right) {
             ;
             removeGraphItems();
             createGraphItems(arr);
-            colorize(i, j);
             yield sleep();
             i++;
         }
@@ -180,6 +181,48 @@ function quickSort(arr, left, right) {
         ;
         if (j + 1 < right) {
             quickSort(arr, j + 1, right);
+        }
+        ;
+        disableMenu(false);
+    });
+}
+;
+//============== heap sort ==============================
+function heapSort(array) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let size = array.length;
+        for (let i = Math.floor(size / 2 - 1); i >= 0; i--) {
+            yield heapify(array, size, i);
+        }
+        for (let i = size - 1; i >= 0; i--) {
+            let temp = array[0];
+            array[0] = array[i];
+            array[i] = temp;
+            yield heapify(array, i, 0);
+        }
+        ;
+    });
+}
+;
+function heapify(array, size, i) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let max = i;
+        let left = 2 * i + 1;
+        let right = 2 * i + 2;
+        removeGraphItems();
+        createGraphItems(arr);
+        yield sleep();
+        if (left < size && array[left] > array[max])
+            max = left;
+        if (right < size && array[right] > array[max]) {
+            max = right;
+        }
+        ;
+        if (max != i) {
+            let temp = array[i];
+            array[i] = array[max];
+            array[max] = temp;
+            yield heapify(array, size, max);
         }
         ;
     });
@@ -197,6 +240,8 @@ const disableMenu = (isSorted) => {
         btnSelectionSort.classList.add("disabled");
         arrSizeInput.disabled = true;
         arrSizeInput.classList.add("disabled");
+        btnQuickSort.disabled = true;
+        btnQuickSort.classList.add("disabled");
     }
     else {
         btnBubbleSort.disabled = false;
@@ -207,10 +252,12 @@ const disableMenu = (isSorted) => {
         btnSelectionSort.classList.remove("disabled");
         arrSizeInput.disabled = false;
         arrSizeInput.classList.remove("disabled");
+        btnQuickSort.disabled = false;
+        btnQuickSort.classList.remove("disabled");
     }
     ;
 };
-generateArray(150);
+generateArray(200);
 btnBubbleSort.addEventListener("click", () => {
     bubbleSort(arr);
 });
@@ -228,4 +275,7 @@ arrSizeInput.addEventListener("change", (event) => {
 });
 arrSortSpeedInput.addEventListener("change", (event) => {
     sortSpeed = parseInt(event.target.value);
+});
+btnHeapSort.addEventListener("click", () => {
+    heapSort(arr);
 });

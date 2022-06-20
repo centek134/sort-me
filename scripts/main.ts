@@ -5,6 +5,7 @@ const btnSelectionSort = document.getElementById("btn_selection") as HTMLButtonE
 const btnQuickSort = document.getElementById("btn_quick") as HTMLButtonElement;
 const arrSizeInput = document.getElementById("arr_size_input") as HTMLInputElement;
 const arrSortSpeedInput = document.getElementById("arr_speed_input") as HTMLInputElement;
+const btnHeapSort = document.getElementById("btn_heap") as HTMLButtonElement;
 
 let arr:number[] = [];
 let sorted_arr_copy:number[] = [];
@@ -125,6 +126,7 @@ async function quickSort(arr:number[],left:number,right:number){
     if(arr.length <= 1){
         return arr;
     };
+    disableMenu(true);
     removeGraphItems();
     createGraphItems(arr);
     let i, j, x;
@@ -139,7 +141,6 @@ async function quickSort(arr:number[],left:number,right:number){
         };
         removeGraphItems();
         createGraphItems(arr);
-        colorize(i,j)
         await sleep()
         i++;
     };
@@ -149,10 +150,49 @@ async function quickSort(arr:number[],left:number,right:number){
     if (left < j - 1){
         quickSort(arr, left, j - 1);
     };
-    if (j+1 < right){
+    if (j + 1 < right){
         quickSort(arr, j+1, right);
     };
+    disableMenu(false);
 };
+
+//============== heap sort ==============================
+
+async function heapSort(array:number[]) {
+    let size = array.length;
+  
+    for (let i = Math.floor(size / 2 - 1); i >= 0; i--){
+        await heapify(array, size, i)
+    };
+    for (let i = size - 1; i >= 0; i--) {
+        let temp = array[0];
+        array[0] = array[i];
+        array[i] = temp;
+        await heapify(array, i, 0);
+    };
+  };
+  
+  async function heapify(array:number[], size:number, i:number) {
+    let max = i;
+    let left = 2 * i + 1;
+    let right = 2 * i + 2;
+    removeGraphItems();
+    createGraphItems(arr);
+    await sleep();
+    if (left < size && array[left] > array[max]){
+        max = left;
+    };
+    if (right < size && array[right] > array[max]){
+        max = right;
+    };
+    if (max != i) {
+      let temp = array[i];
+      array[i] = array[max];
+      array[max] = temp;
+      await heapify(array, size, max);
+    };
+  };
+
 // ======================================================
 
 // functions responsible for disabling navigation buttons
@@ -166,6 +206,8 @@ const disableMenu = (isSorted:boolean):void => {
         btnSelectionSort.classList.add("disabled");
         arrSizeInput.disabled = true;
         arrSizeInput.classList.add("disabled");
+        btnQuickSort.disabled = true;
+        btnQuickSort.classList.add("disabled");
     }
     else{
         btnBubbleSort.disabled = false;
@@ -176,9 +218,11 @@ const disableMenu = (isSorted:boolean):void => {
         btnSelectionSort.classList.remove("disabled");
         arrSizeInput.disabled = false;
         arrSizeInput.classList.remove("disabled");
+        btnQuickSort.disabled = false;
+        btnQuickSort.classList.remove("disabled");
     };
 };
-generateArray(150);
+generateArray(200);
 btnBubbleSort!.addEventListener("click",() => {
     bubbleSort(arr);
 });
@@ -196,4 +240,7 @@ arrSizeInput!.addEventListener("change", (event:any) => {
 });
 arrSortSpeedInput!.addEventListener("change", (event:any) => {
     sortSpeed = parseInt(event.target.value);
+});
+btnHeapSort!.addEventListener("click", () => {
+heapSort(arr);
 });
