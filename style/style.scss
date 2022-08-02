@@ -66,4 +66,21 @@
             background-color: red;
         }
     }
+    .info{
+        display: none;
+    }
+    @media screen and (max-width:850px) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .info{
+            display: block;
+        }
+        .graph{
+            display: none;
+        }
+        .nav{
+            display: none;
+        }
+    }
 }

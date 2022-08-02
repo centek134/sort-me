@@ -16,14 +16,12 @@ const btnQuickSort = document.getElementById("btn_quick");
 const arrSizeInput = document.getElementById("arr_size_input");
 const arrSortSpeedInput = document.getElementById("arr_speed_input");
 const btnHeapSort = document.getElementById("btn_heap");
+const buttons = document.querySelectorAll(".nav_btn");
 let arr = [];
-let sorted_arr_copy = [];
-let sortSpeed = 150;
+let sortSpeed = 75;
 // function that generates our random array
 const generateArray = (arr_size) => {
     arr = Array(arr_size).fill(0, 0).map(() => Math.floor(Math.random() * 300));
-    sorted_arr_copy = JSON.parse(JSON.stringify(arr));
-    sorted_arr_copy.sort((a, b) => a - b);
     removeGraphItems();
     createGraphItems(arr);
 };
@@ -44,24 +42,14 @@ const removeGraphItems = () => {
 const sleep = () => {
     return new Promise(resolve => setTimeout(resolve, sortSpeed));
 };
-// functions that colors our actual compared numbers, it takes 2 numbers (array indexes of compared numbers) and then we are adding styles to them 
-const colorize = (num_1, num_2) => {
-    const nodes = document.querySelectorAll(".item");
-    nodes.forEach(el => {
-        el.classList.remove("compare");
-    });
-    nodes[num_1].classList.add("compare");
-    nodes[num_2].classList.add("compare");
-};
-// function thath compare positions of sorted array with unsorted one.
-// If we sort unsorted array and one of the number is in the correct spot i.e. number is sorted its beign highlighted on yellow
-const compare_pos = () => {
-    const nodes = document.querySelectorAll(".item");
-    for (let i = 0; i < sorted_arr_copy.length; i++) {
-        if (sorted_arr_copy[i] === arr[i]) {
-            nodes[i].style.backgroundColor = "#FFD12A";
-        }
-        ;
+const disableMenuBtns = (props) => {
+    if (props) {
+        buttons.forEach(el => el.disabled = true);
+        arrSizeInput.disabled = true;
+    }
+    else {
+        buttons.forEach(el => el.disabled = false);
+        arrSizeInput.disabled = false;
     }
     ;
 };
@@ -69,11 +57,10 @@ const compare_pos = () => {
 //------------Bubble Sort ---------------------
 function bubbleSort(inputArr) {
     return __awaiter(this, void 0, void 0, function* () {
-        disableMenu(true);
         let len = inputArr.length;
         for (let i = 0; i < len; i++) {
             for (let j = 0; j < len - 1; j++) {
-                colorize(j, j + 1);
+                //colorize(j,j+1)
                 yield sleep();
                 if (inputArr[j] > inputArr[j + 1]) {
                     let tmp = inputArr[j];
@@ -83,29 +70,23 @@ function bubbleSort(inputArr) {
                     createGraphItems(inputArr);
                 }
                 ;
-                compare_pos();
             }
             ;
         }
         ;
-        compare_pos();
-        disableMenu(false);
     });
 }
 ;
 // ----------- Insertion Sort ------------------
 function insertionSort(inputArr) {
     return __awaiter(this, void 0, void 0, function* () {
-        disableMenu(true);
         for (let i = 1; i < inputArr.length; i++) {
             let current = inputArr[i];
             let j = i - 1;
             while ((j > -1) && (current < inputArr[j])) {
-                colorize(i, j);
                 yield sleep();
                 removeGraphItems();
                 createGraphItems(inputArr);
-                compare_pos();
                 inputArr[j + 1] = inputArr[j];
                 j--;
             }
@@ -113,19 +94,16 @@ function insertionSort(inputArr) {
             inputArr[j + 1] = current;
         }
         ;
-        compare_pos();
-        disableMenu(false);
     });
 }
 ;
 // ------------- Selection Sort --------------------
 function selectionSort(arr) {
     return __awaiter(this, void 0, void 0, function* () {
-        disableMenu(true);
         for (let i = 0; i < arr.length; i++) {
             let min = i;
             for (let j = i + 1; j < arr.length; j++) {
-                colorize(min, j);
+                // colorize(min,j);
                 yield sleep();
                 if (arr[j] < arr[min]) {
                     min = j;
@@ -138,21 +116,14 @@ function selectionSort(arr) {
             arr[min] = temp;
             removeGraphItems();
             createGraphItems(arr);
-            compare_pos();
         }
         ;
-        disableMenu(false);
     });
 }
 ;
 //---------------- Quick Sort -----------------------
 function quickSort(arr, left, right) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (arr.length <= 1) {
-            return arr;
-        }
-        ;
-        disableMenu(true);
         removeGraphItems();
         createGraphItems(arr);
         let i, j, x;
@@ -183,7 +154,6 @@ function quickSort(arr, left, right) {
             quickSort(arr, j + 1, right);
         }
         ;
-        disableMenu(false);
     });
 }
 ;
@@ -194,6 +164,7 @@ function heapSort(array) {
         for (let i = Math.floor(size / 2 - 1); i >= 0; i--) {
             yield heapify(array, size, i);
         }
+        ;
         for (let i = size - 1; i >= 0; i--) {
             let temp = array[0];
             array[0] = array[i];
@@ -212,8 +183,10 @@ function heapify(array, size, i) {
         removeGraphItems();
         createGraphItems(arr);
         yield sleep();
-        if (left < size && array[left] > array[max])
+        if (left < size && array[left] > array[max]) {
             max = left;
+        }
+        ;
         if (right < size && array[right] > array[max]) {
             max = right;
         }
@@ -229,53 +202,36 @@ function heapify(array, size, i) {
 }
 ;
 // ======================================================
-// functions responsible for disabling navigation buttons
-const disableMenu = (isSorted) => {
-    if (isSorted) {
-        btnBubbleSort.disabled = true;
-        btnBubbleSort.classList.add("disabled");
-        btnInsertSort.disabled = true;
-        btnInsertSort.classList.add("disabled");
-        btnSelectionSort.disabled = true;
-        btnSelectionSort.classList.add("disabled");
-        arrSizeInput.disabled = true;
-        arrSizeInput.classList.add("disabled");
-        btnQuickSort.disabled = true;
-        btnQuickSort.classList.add("disabled");
-    }
-    else {
-        btnBubbleSort.disabled = false;
-        btnBubbleSort.classList.remove("disabled");
-        btnInsertSort.disabled = false;
-        btnInsertSort.classList.remove("disabled");
-        btnSelectionSort.disabled = false;
-        btnSelectionSort.classList.remove("disabled");
-        arrSizeInput.disabled = false;
-        arrSizeInput.classList.remove("disabled");
-        btnQuickSort.disabled = false;
-        btnQuickSort.classList.remove("disabled");
-    }
-    ;
-};
 generateArray(200);
-btnBubbleSort.addEventListener("click", () => {
-    bubbleSort(arr);
-});
-btnInsertSort.addEventListener("click", () => {
-    insertionSort(arr);
-});
-btnSelectionSort.addEventListener("click", () => {
-    selectionSort(arr);
-});
-btnQuickSort.addEventListener("click", () => {
-    console.log(quickSort(arr, 0, arr.length - 1));
-});
+btnBubbleSort.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
+    disableMenuBtns(true);
+    yield bubbleSort(arr);
+    disableMenuBtns(false);
+}));
+btnInsertSort.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
+    disableMenuBtns(true);
+    yield insertionSort(arr);
+    disableMenuBtns(false);
+}));
+btnSelectionSort.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
+    disableMenuBtns(true);
+    yield selectionSort(arr);
+    disableMenuBtns(false);
+}));
+btnQuickSort.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
+    disableMenuBtns(true);
+    yield quickSort(arr, 0, arr.length - 1);
+    disableMenuBtns(false);
+}));
 arrSizeInput.addEventListener("change", (event) => {
     generateArray(parseInt(event.target.value));
 });
 arrSortSpeedInput.addEventListener("change", (event) => {
     sortSpeed = parseInt(event.target.value);
 });
-btnHeapSort.addEventListener("click", () => {
-    heapSort(arr);
-});
+btnHeapSort.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
+    disableMenuBtns(true);
+    yield heapSort(arr);
+    disableMenuBtns(false);
+}));
+//============================================

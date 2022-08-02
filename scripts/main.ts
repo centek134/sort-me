@@ -6,16 +6,14 @@ const btnQuickSort = document.getElementById("btn_quick") as HTMLButtonElement;
 const arrSizeInput = document.getElementById("arr_size_input") as HTMLInputElement;
 const arrSortSpeedInput = document.getElementById("arr_speed_input") as HTMLInputElement;
 const btnHeapSort = document.getElementById("btn_heap") as HTMLButtonElement;
+const buttons:NodeListOf<HTMLButtonElement> = document.querySelectorAll(".nav_btn");
 
 let arr:number[] = [];
-let sorted_arr_copy:number[] = [];
-let sortSpeed = 150;
+let sortSpeed = 75;
 
 // function that generates our random array
 const generateArray = (arr_size:number) => {
     arr = Array(arr_size).fill(0,0).map( () => Math.floor(Math.random() * 300));
-    sorted_arr_copy = JSON.parse(JSON.stringify(arr));
-    sorted_arr_copy.sort((a,b)=> a-b);
     removeGraphItems();
     createGraphItems(arr);
 };
@@ -32,38 +30,32 @@ const createGraphItems = (arr:number[]):void => {
 const removeGraphItems = ():void => {
     graphId!.innerHTML = "";
 };
+
 // function that returns promise, we are using it to control render time
 const sleep = () => {
     return new Promise(resolve => setTimeout(resolve, sortSpeed));
 };
-// functions that colors our actual compared numbers, it takes 2 numbers (array indexes of compared numbers) and then we are adding styles to them 
-const colorize = (num_1:number,num_2:number):void => {
-    const nodes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".item");
-    nodes.forEach(el => {
-        el.classList.remove("compare");
-    });
-    nodes[num_1].classList.add("compare");
-    nodes[num_2].classList.add("compare");
-};
-// function thath compare positions of sorted array with unsorted one.
-// If we sort unsorted array and one of the number is in the correct spot i.e. number is sorted its beign highlighted on yellow
-const compare_pos = () => {
-    const nodes: NodeListOf<HTMLDivElement> = document.querySelectorAll(".item");
-    for(let i = 0; i < sorted_arr_copy.length; i++){
-        if(sorted_arr_copy[i] === arr[i]){
-            nodes[i].style.backgroundColor = "#FFD12A";
-        };
+
+const disableMenuBtns = (props:boolean) => {
+    if(props){
+        buttons.forEach(el => el.disabled = true);
+        arrSizeInput.disabled = true;
+    }
+    else{
+        buttons.forEach(el => el.disabled = false);
+        arrSizeInput.disabled = false;
     };
 };
+
+
 // ========= SORTING FUNCTIONS ===============
 
 //------------Bubble Sort ---------------------
 async function bubbleSort(inputArr:number[]){
-    disableMenu(true);
     let len: number = inputArr.length;
     for (let i = 0; i < len; i++) {
         for (let j = 0; j < len -1 ; j++) {
-            colorize(j,j+1)
+            //colorize(j,j+1)
             await sleep();
             if (inputArr[j] > inputArr[j+1]){
                 let tmp = inputArr[j];
@@ -72,61 +64,45 @@ async function bubbleSort(inputArr:number[]){
                 removeGraphItems();
                 createGraphItems(inputArr);
             };
-            compare_pos();
         };
     };
-    compare_pos();
-    disableMenu(false);
 };
 // ----------- Insertion Sort ------------------
 async function insertionSort(inputArr:number[]) {
-    disableMenu(true);
     for (let i = 1; i < inputArr.length; i++){
         let current = inputArr[i];
         let j = i-1; 
         while ((j > -1) && (current < inputArr[j])) {
-            colorize(i,j)
             await sleep();
             removeGraphItems();
             createGraphItems(inputArr);
-            compare_pos();
             inputArr[j+1] = inputArr[j];
             j--;
         };
         inputArr[j+1] = current;
     };
-    compare_pos();
-    disableMenu(false);
 };
 // ------------- Selection Sort --------------------
 async function selectionSort (arr:number[]){
-    disableMenu(true);
     for(let i = 0; i < arr.length; i++){
         let min:number = i;
         for(let j = i+1; j < arr.length; j++){
-            colorize(min,j);
+           // colorize(min,j);
             await sleep();
             if(arr[j] < arr[min]){
                 min = j;
             };
         };
-        
         let temp:number = arr[i];
         arr[i] = arr[min];
         arr[min] = temp;
         removeGraphItems();
         createGraphItems(arr);
-        compare_pos();
     };
-    disableMenu(false);
   };
 
 //---------------- Quick Sort -----------------------
 async function quickSort(arr:number[],left:number,right:number){
-    if(arr.length <= 1){
-        return arr;
-    };
-    disableMenu(true);
     removeGraphItems();
     createGraphItems(arr);
     let i, j, x;
@@ -153,14 +129,12 @@ async function quickSort(arr:number[],left:number,right:number){
     if (j + 1 < right){
         quickSort(arr, j+1, right);
     };
-    disableMenu(false);
 };
 
 //============== heap sort ==============================
 
 async function heapSort(array:number[]) {
     let size = array.length;
-  
     for (let i = Math.floor(size / 2 - 1); i >= 0; i--){
         await heapify(array, size, i)
     };
@@ -195,52 +169,38 @@ async function heapSort(array:number[]) {
 
 // ======================================================
 
-// functions responsible for disabling navigation buttons
-const disableMenu = (isSorted:boolean):void => {
-    if(isSorted){
-        btnBubbleSort.disabled = true;
-        btnBubbleSort.classList.add("disabled");
-        btnInsertSort.disabled = true;
-        btnInsertSort.classList.add("disabled");
-        btnSelectionSort.disabled = true;
-        btnSelectionSort.classList.add("disabled");
-        arrSizeInput.disabled = true;
-        arrSizeInput.classList.add("disabled");
-        btnQuickSort.disabled = true;
-        btnQuickSort.classList.add("disabled");
-    }
-    else{
-        btnBubbleSort.disabled = false;
-        btnBubbleSort.classList.remove("disabled");
-        btnInsertSort.disabled = false;
-        btnInsertSort.classList.remove("disabled");
-        btnSelectionSort.disabled = false;
-        btnSelectionSort.classList.remove("disabled");
-        arrSizeInput.disabled = false;
-        arrSizeInput.classList.remove("disabled");
-        btnQuickSort.disabled = false;
-        btnQuickSort.classList.remove("disabled");
-    };
-};
 generateArray(200);
-btnBubbleSort!.addEventListener("click",() => {
-    bubbleSort(arr);
+btnBubbleSort!.addEventListener("click",async () => {
+    disableMenuBtns(true);
+    await bubbleSort(arr);
+    disableMenuBtns(false);
 });
-btnInsertSort!.addEventListener("click",() => {
-    insertionSort(arr);
+btnInsertSort!.addEventListener("click",async () => {
+    disableMenuBtns(true);
+    await insertionSort(arr);
+    disableMenuBtns(false);
 });
-btnSelectionSort!.addEventListener("click", () => {
-    selectionSort(arr);
+btnSelectionSort!.addEventListener("click", async () => {
+    disableMenuBtns(true);
+    await selectionSort(arr);
+    disableMenuBtns(false);
 });
-btnQuickSort.addEventListener("click", () => {
-    console.log(quickSort(arr,0,arr.length-1));
+btnQuickSort.addEventListener("click", async () => {
+    disableMenuBtns(true);
+    await quickSort(arr,0,arr.length-1);
+    disableMenuBtns(false);
+
 });
 arrSizeInput!.addEventListener("change", (event:any) => {
     generateArray(parseInt(event.target.value));
+
 });
 arrSortSpeedInput!.addEventListener("change", (event:any) => {
     sortSpeed = parseInt(event.target.value);
 });
-btnHeapSort!.addEventListener("click", () => {
-heapSort(arr);
+btnHeapSort!.addEventListener("click", async () => {
+    disableMenuBtns(true);
+    await heapSort(arr);
+    disableMenuBtns(false);
 });
+//============================================
